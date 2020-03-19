@@ -1,6 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Arenal.Dms.Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace Arenal.Dms.Domain.Repository
 {
@@ -12,8 +16,7 @@ namespace Arenal.Dms.Domain.Repository
             DataContext = dataContext;
         }
 
-
-        public async Task<T> Add(T entity)
+        public async Task Add(T entity)
         {
             await DataContext.Set<T>().AddAsync(entity);
             await DataContext.SaveChangesAsync();
@@ -26,11 +29,11 @@ namespace Arenal.Dms.Domain.Repository
 
         }
 
-        //public async Task<T> Update(T entity)
-        //{
-        //    await DataContext.Set<T>().Update(entity);
-
-        //}
+        public async Task Update(T entity)
+        {
+            DataContext.Set<T>().Update(entity);
+            await DataContext.SaveChangesAsync();
+        }
 
         public async Task Delete(T entity)
         {
@@ -42,6 +45,26 @@ namespace Arenal.Dms.Domain.Repository
         {
             DataContext.Set<T>().RemoveRange(entity);
             await DataContext.SaveChangesAsync();
+        }
+
+        public async Task<IEnumerable<T>> GetAll()
+        {
+            return await DataContext.Set<T>().ToListAsync();
+        }
+
+        public async Task<IEnumerable<T>> GetWhere(Expression<Func<T, bool>> predicate)
+        {
+            return await DataContext.Set<T>().Where(predicate).ToListAsync();
+        }
+
+        public async Task<int> CountAll()
+        {
+            return await DataContext.Set<T>().CountAsync();
+        }
+
+        public async Task<int> CountWhere(Expression<Func<T, bool>> predicate)
+        {
+            return await DataContext.Set<T>().CountAsync(predicate);
         }
     }
 }

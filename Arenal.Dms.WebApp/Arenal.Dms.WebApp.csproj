@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Arenal.Dms.Core\Arenal.Dms.Core.csproj" />
+    <ProjectReference Include="..\Arenal.Dms.Domain\Arenal.Dms.Domain.csproj" />
   </ItemGroup>
 
   <ItemGroup>

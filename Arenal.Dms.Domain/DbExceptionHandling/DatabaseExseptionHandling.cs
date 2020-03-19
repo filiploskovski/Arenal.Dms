@@ -1,19 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 
-namespace Arenal.Dms.WebApp.Configuration
+namespace Arenal.Dms.Domain
 {
-    public class ExceptionMiddleware
+    public class DatabaseExceptionMiddleware
     {
         private readonly RequestDelegate _next;
 
-        public ExceptionMiddleware(RequestDelegate next)
+        public DatabaseExceptionMiddleware(RequestDelegate next)
         {
             _next = next;
         }
@@ -43,7 +41,7 @@ namespace Arenal.Dms.WebApp.Configuration
                 }
             }
 
-            return context.Response.WriteAsync(new ErrorDetails()
+            return context.Response.WriteAsync(new DatabaseExceptionModel
             {
                 Message = "Decko Greska Si",
                 StatusCode = context.Response.StatusCode
@@ -51,13 +49,11 @@ namespace Arenal.Dms.WebApp.Configuration
         }
     }
 
-    
-
-    public static class ExceptionConfig
+    public static class DatabaseExceptionConfig
     {
-        public static void CustomExceptionConfig(this IApplicationBuilder app)
+        public static void DatabaseExceptionConfiguration(this IApplicationBuilder app)
         {
-            app.UseMiddleware<ExceptionMiddleware>();
+            app.UseMiddleware<DatabaseExceptionMiddleware>();
         }
     }
 }

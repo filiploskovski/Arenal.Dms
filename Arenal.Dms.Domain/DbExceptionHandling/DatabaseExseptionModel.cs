@@ -1,8 +1,8 @@
 ﻿using Newtonsoft.Json;
 
-namespace Arenal.Dms.WebApp.Configuration
+namespace Arenal.Dms.Domain
 {
-    public class ErrorDetails
+    public class DatabaseExceptionModel
     {
         public int StatusCode { get; set; }
         public string Message { get; set; }
