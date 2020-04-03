@@ -22,6 +22,7 @@ namespace Arenal.Dms.Domain.Entities
         public virtual DbSet<DocumentType> DocumentType { get; set; }
         public virtual DbSet<Employee> Employee { get; set; }
         public virtual DbSet<EmployeePicture> EmployeePicture { get; set; }
+        public virtual DbSet<Messaging> Messaging { get; set; }
         public virtual DbSet<Role> Role { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -29,18 +30,16 @@ namespace Arenal.Dms.Domain.Entities
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseSqlServer("Data Source= 107.151.3.34\\MSSQLSERVER2016;Initial Catalog=arenalDms;user id=freefixe_filipCash;password=jDb*1T4BPiTyt!$;");
+                optionsBuilder.UseSqlServer("Data Source= 107.151.3.34\\MSSQLSERVER2016;Initial Catalog=arenalDms;user id=freefixe_losko;password=8!Yqs8x9;");
             }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.HasAnnotation("Relational:DefaultSchema", "freefixe_filipCash");
+            modelBuilder.HasAnnotation("Relational:DefaultSchema", "freefixe_losko");
 
             modelBuilder.Entity<Company>(entity =>
             {
-                entity.ToTable("Company", "freefixe_losko");
-
                 entity.Property(e => e.CompanyName)
                     .IsRequired()
                     .HasMaxLength(50);
@@ -54,8 +53,6 @@ namespace Arenal.Dms.Domain.Entities
 
             modelBuilder.Entity<Document>(entity =>
             {
-                entity.ToTable("Document", "freefixe_losko");
-
                 entity.Property(e => e.DocumentId).ValueGeneratedNever();
 
                 entity.Property(e => e.DocumentFolderId).ValueGeneratedOnAdd();
@@ -77,8 +74,6 @@ namespace Arenal.Dms.Domain.Entities
 
             modelBuilder.Entity<DocumentFile>(entity =>
             {
-                entity.ToTable("DocumentFile", "freefixe_losko");
-
                 entity.Property(e => e.File).IsRequired();
 
                 entity.HasOne(d => d.Document)
@@ -90,8 +85,6 @@ namespace Arenal.Dms.Domain.Entities
 
             modelBuilder.Entity<DocumentFolder>(entity =>
             {
-                entity.ToTable("DocumentFolder", "freefixe_losko");
-
                 entity.Property(e => e.CreatedAt).HasColumnType("datetime");
 
                 entity.Property(e => e.DocumentFolderName)
@@ -107,8 +100,6 @@ namespace Arenal.Dms.Domain.Entities
 
             modelBuilder.Entity<DocumentType>(entity =>
             {
-                entity.ToTable("DocumentType", "freefixe_losko");
-
                 entity.Property(e => e.DocumentTypeName)
                     .IsRequired()
                     .HasMaxLength(50);
@@ -116,8 +107,6 @@ namespace Arenal.Dms.Domain.Entities
 
             modelBuilder.Entity<Employee>(entity =>
             {
-                entity.ToTable("Employee", "freefixe_losko");
-
                 entity.Property(e => e.DateCreated).HasColumnType("datetime");
 
                 entity.Property(e => e.FirstName)
@@ -153,8 +142,6 @@ namespace Arenal.Dms.Domain.Entities
             {
                 entity.HasKey(e => e.EmployeeId);
 
-                entity.ToTable("EmployeePicture", "freefixe_losko");
-
                 entity.Property(e => e.EmployeeId).ValueGeneratedNever();
 
                 entity.Property(e => e.Picture).IsRequired();
@@ -165,10 +152,17 @@ namespace Arenal.Dms.Domain.Entities
                     .HasConstraintName("FK_EmployeePicture_EmployeePicture");
             });
 
+            modelBuilder.Entity<Messaging>(entity =>
+            {
+                entity.Property(e => e.Id).ValueGeneratedNever();
+
+                entity.Property(e => e.Date).HasColumnType("date");
+
+                entity.Property(e => e.Text).IsRequired();
+            });
+
             modelBuilder.Entity<Role>(entity =>
             {
-                entity.ToTable("Role", "freefixe_losko");
-
                 entity.Property(e => e.RoleName)
                     .IsRequired()
                     .HasMaxLength(50);

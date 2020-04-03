@@ -1,4 +1,5 @@
 using Arenal.Dms.Core;
+using Arenal.Dms.Core.Hubs;
 using Arenal.Dms.Domain;
 using Arenal.Dms.WebApp.Configuration;
 using Microsoft.AspNetCore.Builder;
@@ -24,6 +25,7 @@ namespace Arenal.Dms.WebApp
             services.JwtConfig(Configuration);
             services.SwaggerConfig();
             services.ServicesDependencyInjection();
+            services.AddSignalR();
             services.AddControllers();
         }
 
@@ -38,7 +40,11 @@ namespace Arenal.Dms.WebApp
             app.UseAuthentication();
             app.UseAuthorization();
             app.DatabaseExceptionConfiguration();
-            app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+                endpoints.MapHub<ChatHub>("/chat");
+            });
         }
     }
 }
